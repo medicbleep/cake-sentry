@@ -10,7 +10,8 @@
     "require": {
         "php": ">=5.2.8",
         "composer/installers": "*",
-        "sentry/sentry": "^3.0"
+        "sentry/sentry": "^3.0",
+        "symfony/http-client": "^5.1"
     },
     "license": "WTFPL",
     "authors": [
