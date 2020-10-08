@@ -33,8 +33,7 @@ class SentryLog extends BaseLog {
 		parent::__construct($config);
 
 		if (Configure::read('debug') == 0 || !Configure::read('Sentry.production_only')) {
-			Raven_Autoloader::register();
-			$this->__client = new CakeRavenClient($this->_config['server'], $this->_config['clientOptions']);
+            Sentry\init(['dsn' => 'http://efd07d9029bb4bbfb21fbd15bac65b0c@logs.infomoz.net/3' ]);
 		}
 	}
 

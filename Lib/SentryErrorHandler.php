@@ -11,11 +11,12 @@
 
         protected static function sentryLog($exception)
         {
-            if (Configure::read('debug') == 0 || !Configure::read('Sentry.production_only')) {
-                Raven_Autoloader::register();
-                App::uses('CakeRavenClient', 'Sentry.Lib');
-
-                $client = new Raven_Client(Configure::read('Sentry.PHP.server'));
+            Sentry\init([
+                'dsn' => 'http://efd07d9029bb4bbfb21fbd15bac65b0c@logs.infomoz.net/3',
+                'traces_sample_rate' => 1.0,
+                'environment'=>Configure::read('environment')
+            ]);
+            if (!Configure::read('Sentry.production_only')) {
                 if (class_exists('AuthComponent')) {
                     $model = Configure::read('Sentry.User.model');
                     if (empty($model)) {
@@ -32,21 +33,28 @@
                             }
                         }
                     }
-                    $client->user_context(array(
+                    /*$client->user_context(array(
                         "is_authenticated" => AuthComponent::user($User->primaryKey) ? true : false,
                         "id" => AuthComponent::user($User->primaryKey),
                         "username" => AuthComponent::user($User->displayField),
                         "email" => AuthComponent::user($mail)
-                    ));
+                    ));*/
                 }
-                $eventId = $client->captureException($exception, array(
+                Sentry\configureScope(function (Sentry\State\Scope $scope) use($exception)  : void {
+                    $scope->setExtra('php_version', phpversion())
+                        ->setExtra('class',get_class($exception));
+                });
+                Sentry\captureException($exception);
+                /*var_dump('Teste');
+                die();*/
+                /*$eventId = $client->captureException($exception, array(
                     'extra' => array(
                         'php_version' => phpversion(),
                         'class' => get_class($exception)
                     ),
-                ));
+                ));*/
 
-                CakeSession::write('sentry_event_id',$eventId);
+               // CakeSession::write('sentry_event_id',$eventId);
             }
         }
 
