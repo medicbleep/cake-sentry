@@ -32,7 +32,7 @@ class SentryLog extends BaseLog {
 
 		parent::__construct($config);
 
-		if (Configure::read('debug') == 0 || !Configure::read('Sentry.production_only')) {
+		if (!Configure::read('Sentry.production_only')) {
             Sentry\init(['dsn' => 'http://efd07d9029bb4bbfb21fbd15bac65b0c@logs.infomoz.net/3' ]);
 		}
 	}
@@ -58,7 +58,7 @@ class SentryLog extends BaseLog {
 		);
 		$level = array_key_exists($type, $_typesMapping) ? $_typesMapping[$type] : CakeRavenClient::INFO;
 
-		$this->__client->captureMessage($message, array(), $level);
+        Sentry\captureMessage($message,$level);
 		return true;
 	}
 
