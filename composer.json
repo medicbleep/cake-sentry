@@ -10,7 +10,7 @@
     "require": {
         "php": ">=5.2.8",
         "composer/installers": "*",
-        "sentry/sentry": "^1.8"
+        "sentry/sentry": "^3.0"
     },
     "license": "WTFPL",
     "authors": [
