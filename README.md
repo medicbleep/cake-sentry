@@ -33,6 +33,19 @@ App::uses('SentryConfigure', 'Sentry.Lib');
 new SentryConfigure();
 ```
 
+You can add Exception classes to the ignore list here as well:
+
+```php
+new SentryConfigure([
+  MissingControllerException::class,
+  MissingActionException::class
+]);
+```
+
+Underneath the hood, the filtering logic is a closure, so you can
+create your own filter rules easily. Take a look at the `SentryConfigure`
+class if you need help.
+
 3. Configure the error handler in your _core.php_ :
 
 ```php
