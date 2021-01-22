@@ -28,6 +28,7 @@ class SentryErrorHandler extends ErrorHandler
                 'dsn' => Configure::read('SENTRY_DSN'),
                 'traces_sample_rate' => 1.0,
                 'environment' => Configure::read('environment'),
+                'release' => Configure::read('SENTRY_RELEASE')
             ]);
             if (class_exists('AuthComponent')) {
                 $model = Configure::read('Sentry.User.model');
