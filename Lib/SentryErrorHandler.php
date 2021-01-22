@@ -32,7 +32,8 @@ class SentryErrorHandler extends ErrorHandler
     {
 
         if (is_callable(self::$exceptionFilterFunc) || !self::$exceptionFilterFunc.($exception)) {
-            return parent::handleException($exception);
+            parent::handleException($exception);
+	    return;
         }
 
         try {
