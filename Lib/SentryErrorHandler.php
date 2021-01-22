@@ -9,6 +9,8 @@
 class SentryErrorHandler extends ErrorHandler
 {
 
+    public static $exceptionFilterFunc = null;
+
     public static function handleError($code, $description, $file = null, $line = null, $context = null)
     {
         try {
@@ -28,12 +30,15 @@ class SentryErrorHandler extends ErrorHandler
 
     public static function handleException($exception)
     {
+
+        if (is_callable(self::$exceptionFilterFunc) || !self::$exceptionFilterFunc.($exception)) {
+            return parent::handleException($exception);
+        }
+
         try {
             self::sentryLog($exception);
-
+        } finally {
             parent::handleException($exception);
-        } catch (Exception $e) {
-            parent::handleException($e);
         }
     }
 }
