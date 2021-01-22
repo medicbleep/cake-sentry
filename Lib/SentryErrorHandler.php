@@ -24,11 +24,11 @@ class SentryErrorHandler extends ErrorHandler
     protected static function sentryLog($exception)
     {
 
-        $sentryParams = [
+        $defaultParams = [
             'traces_sample_rate' => 1.0
         ];
 
-        $sentryParams = array_merge_recursive($sentryParams, Configure::read('Sentry.init') || []);
+        $sentryParams = array_merge_recursive($defaultParams, Configure::read('Sentry.init'));
         Sentry\init($sentryParams);
         Sentry\captureException($exception);
     }
