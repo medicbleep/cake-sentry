@@ -39,13 +39,13 @@ new SentryConfigure();
 App::uses('SentryErrorHandler', 'Sentry.Lib');
 
 Configure::write('Sentry', [
-		'init' => [
-			// Standard Sentry configuration goes here like so:
-			'dsn' => 'php-dsn',
-			'environment' => 'development',
-			'release' => 'abc@0.0.1'
-		]
-	]);
+    'init' => [
+      // Standard Sentry configuration goes here like so:
+      'dsn' => 'php-dsn',
+      'environment' => 'development',
+      'release' => 'abc@0.0.1'
+    ]
+  ]);
 ]);
 
 Configure::write('Error', [
@@ -69,13 +69,13 @@ CakeLog::config('default', ['engine' => 'Sentry.SentryLog']);
 5. include ravenjs and init script in the default layout :
 
 ```php
-	<?php
- echo $this->Html->script('jquery');
- echo $this->Html->script('ravenjs-min');
- ?>
-	<script type="text/javascript">
-		$(function () {
-			<?php echo $this->element('Sentry.raven-js'); ?>
-		});
-	</script>
+  <?php
+  echo $this->Html->script('jquery');
+  echo $this->Html->script('ravenjs-min');
+  ?>
+  <script type="text/javascript">
+    $(function () {
+      <?php echo $this->element('Sentry.raven-js'); ?>
+    });
+  </script>
 ```
