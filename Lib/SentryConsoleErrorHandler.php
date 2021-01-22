@@ -13,7 +13,7 @@ class SentryConsoleErrorHandler extends ConsoleErrorHandler {
         Raven_Autoloader::register();
         App::uses('CakeRavenClient', 'Sentry.Lib');
 
-        $client = new CakeRavenClient(Configure::read('Sentry.PHP.server'));
+        $client = new CakeRavenClient(Configure::read('Sentry.init.dsn'));
         $client->captureException($exception, get_class($exception), 'PHP');
 	}
 

@@ -26,7 +26,7 @@ class SentryLog extends BaseLog {
  */
 	public function __construct($config = array()) {
 		$config = Hash::merge(array(
-			'server' => Configure::read('Sentry.PHP.server'),
+			'server' => Configure::read('Sentry.init.dsn'),
 			'clientOptions' => array('auto_log_stacks' => true),
 		), $config);
 

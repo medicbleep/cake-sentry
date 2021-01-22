@@ -36,20 +36,14 @@ Installation
 ```php
 	App::uses('SentryErrorHandler', 'Sentry.Lib');
 	
-	Configure::write('Sentry', array(
-		'production_only' => false, // true is default value -> no error in sentry when debug
-		'avoid_bot_scan_errors' => 'MissingController or MissingPlugin error message', // or false if you want Sentry to log MissingController and MissingPlugin Exceptions
-		'User' => array(
-			'model' => 'SpecialUser', // 'User' is default value
-			'email_field' => 'special_email' // default checks 'email' and 'mail' fields
-		),
-		'PHP' => array(
-			'server'=>'http://your-sentry-DSN-for-PHP'
-		),
-		'javascript' => array(
-			'server'=>'http://your-sentry-DSN-for-javascript'
-		)
-	));
+	Configure::write('Sentry', [
+		'init' => [
+			// Standard Sentry configuration goes here like so:
+			'dsn' => 'php-dsn',
+			'environment' => 'development',
+			'release' => 'abc@0.0.1'
+		]
+	]);
 
 	Configure::write('Error', array(
 		'handler' => 'SentryErrorHandler::handleError',
