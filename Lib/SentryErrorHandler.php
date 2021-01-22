@@ -31,9 +31,13 @@ class SentryErrorHandler extends ErrorHandler
     public static function handleException($exception)
     {
 
-        if (is_callable(self::$exceptionFilterFunc) || !self::$exceptionFilterFunc.($exception)) {
+        // If the filter returns true, then don't send to sentry as it's in the ignoreList
+        if (
+            is_callable(self::$exceptionFilterFunc) &&
+            call_user_func(self::$exceptionFilterFunc, $exception) == true
+        ){
             parent::handleException($exception);
-	    return;
+            return;
         }
 
         try {

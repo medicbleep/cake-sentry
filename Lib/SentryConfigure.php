@@ -32,7 +32,7 @@ class SentryConfigure {
      * @returns void
      */
      private function addExceptionFilter($exceptionIgnoreList = []) {
-         SentryErrorHandler::$exceptionFilterFunc = function($exception) use ($exceptionIgnoreList) {
+         SentryErrorHandler::$exceptionFilterFunc = function(Exception $exception) use (&$exceptionIgnoreList): bool {
              return in_array(get_class($exception), $exceptionIgnoreList);
          };
      }
