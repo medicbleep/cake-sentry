@@ -23,51 +23,19 @@ class SentryErrorHandler extends ErrorHandler
 
     protected static function sentryLog($exception)
     {
-        if (!Configure::read('Sentry.production_only')) {
-            Sentry\init([
-                'dsn' => Configure::read('SENTRY_DSN'),
-                'traces_sample_rate' => 1.0,
-                'environment' => Configure::read('environment'),
-            ]);
-            if (class_exists('AuthComponent')) {
-                $model = Configure::read('Sentry.User.model');
-                if (empty($model)) {
-                    $model = 'User';
-                }
-                $User = ClassRegistry::init($model);
-                $mail = Configure::read('Sentry.User.email_field');
-                if (empty($mail)) {
-                    if ($User->hasField('email')) {
-                        $mail = 'email';
-                    } else {
-                        if ($User->hasField('mail')) {
-                            $mail = 'mail';
-                        }
-                    }
-                }
-                if (AuthComponent::user($User->primaryKey)) {
-                    Sentry\configureScope(function (Sentry\State\Scope $scope) use ($mail, $User): void {
-                        $scope->setUser([
-                            'email' => AuthComponent::user($mail),
-                            "id" => AuthComponent::user($User->primaryKey),
-                            "username" => AuthComponent::user($User->displayField),
-                        ]);
-                    });
-                }
-            }
-            Sentry\captureException($exception);
-        }
+
+        $sentryParams = [
+            'traces_sample_rate' => 1.0
+        ];
+
+        $sentryParams = array_merge_recursive($sentryParams, Configure::read('Sentry.init') || []);
+        Sentry\init($sentryParams);
+        Sentry\captureException($exception);
     }
 
     public static function handleException($exception)
     {
         try {
-            // Avoid bot scan errors
-            if (Configure::read('Sentry.avoid_bot_scan_errors') && ($exception instanceof MissingControllerException || $exception instanceof MissingPluginException) && Configure::read('debug') == 0) {
-                echo Configure::read('Sentry.avoid_bot_scan_errors');
-                exit(0);
-            }
-
             self::sentryLog($exception);
 
             parent::handleException($exception);

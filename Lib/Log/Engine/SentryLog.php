@@ -31,10 +31,6 @@ class SentryLog extends BaseLog {
 		), $config);
 
 		parent::__construct($config);
-
-		if (!Configure::read('Sentry.production_only')) {
-            Sentry\init(['dsn' => 'http://efd07d9029bb4bbfb21fbd15bac65b0c@logs.infomoz.net/3' ]);
-		}
 	}
 
 /**
