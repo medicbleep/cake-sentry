@@ -9,7 +9,7 @@
 class SentryErrorHandler extends ErrorHandler
 {
 
-    public static $exceptionFilterFunc = null;
+    public static $throwableFilterFunc = null;
 
     public static function handleError($code, $description, $file = null, $line = null, $context = null)
     {
@@ -33,8 +33,8 @@ class SentryErrorHandler extends ErrorHandler
 
         // If the filter returns true, then don't send to sentry as it's in the ignoreList
         if (
-            is_callable(self::$exceptionFilterFunc) &&
-            call_user_func(self::$exceptionFilterFunc, $exception) == true
+            is_callable(self::$throwableFilterFunc) &&
+            call_user_func(self::$throwableFilterFunc, $exception) == true
         ){
             parent::handleException($exception);
             return;
