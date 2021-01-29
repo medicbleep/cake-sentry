@@ -30,21 +30,13 @@ This library is only compatible with CakePHP >= 2.8 and < 3.0. If you need suppo
 CakePlugin::load('Sentry');
 // Setup Sentry configuration
 App::uses('SentryConfigure', 'Sentry.Lib');
-new SentryConfigure();
-```
-
-You can add Exception classes to the ignore list here as well:
-
-```php
 new SentryConfigure([
+  // Ignore the following Exceptions:
+  // (any Throwable class is valid here)
   MissingControllerException::class,
-  MissingActionException::class
+  MissingActionException::class,
 ]);
 ```
-
-Underneath the hood, the filtering logic is a closure, so you can
-create your own filter rules easily. Take a look at the `SentryConfigure`
-class if you need help.
 
 3. Configure the error handler in your _core.php_ :
 

@@ -16,25 +16,26 @@ class SentryConfigure {
      private $defaults = ['traces_sample_rate' => 1.0];
      private $clientConfig = [];
 
-     public function __construct($exceptionIgnoreList = []) {
+     public function __construct($throwableIgnoreList = []) {
          $userConfig = Configure::read('Sentry.init');
          if (is_array($userConfig)) {
              $this->clientConfig = array_merge_recursive($this->defaults, $userConfig);
          }
 
-         $this->addExceptionFilter($exceptionIgnoreList);
+         $this->addThrowableFilter($throwableIgnoreList);
          Sentry\init($this->clientConfig);
      }
 
     /**
-     * Adds an exception filter function to the SentryErrorHandler
-     * @param array $exceptionIgnoreList
+     * Adds an throwable (the root class for both Error & Exception) filter function to the SentryErrorHandler
+     *
+     * @param array $throwableIgnoreList
      * @returns void
      */
-     private function addExceptionFilter($exceptionIgnoreList = []) {
-         SentryErrorHandler::$exceptionFilterFunc = function(Exception $exception) use (&$exceptionIgnoreList): bool {
-             return in_array(get_class($exception), $exceptionIgnoreList);
-         };
-     }
+    private function addThrowableFilter($throwableIgnoreList = []) {
+        SentryErrorHandler::$throwableFilterFunc = function (Throwable $throwable) use (&$throwableIgnoreList): bool {
+            return in_array(get_class($throwable), $throwableIgnoreList);
+        };
+    }
 
 }
